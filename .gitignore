@@ -6,3 +6,4 @@ dist/
 var/
 Icon/AppIcon.iconset/
 agentes.json
+harness/

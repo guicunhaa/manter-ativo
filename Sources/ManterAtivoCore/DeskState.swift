@@ -28,6 +28,20 @@ public struct DeskDuplicate: Codable, Equatable, Sendable {
     }
 }
 
+public struct DeskAgent: Codable, Equatable, Sendable {
+    public var titulo: String
+    public var cpu: Double
+    public var ram: UInt64
+    public var copias: Int
+
+    public init(titulo: String, cpu: Double, ram: UInt64, copias: Int) {
+        self.titulo = titulo
+        self.cpu = cpu
+        self.ram = ram
+        self.copias = copias
+    }
+}
+
 /// Retrato largo da máquina, sem caminhos de arquivo.
 public struct DeskState: Codable, Equatable, Sendable {
     public var atualizado: Date
@@ -58,6 +72,7 @@ public struct DeskState: Codable, Equatable, Sendable {
     public var segurandoSono: [String]
     public var familias: [DeskFamily]
     public var agentesRepetidos: [DeskDuplicate]
+    public var agentes: [DeskAgent]
     public var perfilSugerido: String?
     public var spotlight: Bool?
     public var versao: String
@@ -91,6 +106,7 @@ public struct DeskState: Codable, Equatable, Sendable {
         segurandoSono: [String],
         familias: [DeskFamily],
         agentesRepetidos: [DeskDuplicate],
+        agentes: [DeskAgent],
         perfilSugerido: String?,
         spotlight: Bool?,
         versao: String
@@ -123,6 +139,7 @@ public struct DeskState: Codable, Equatable, Sendable {
         self.segurandoSono = segurandoSono
         self.familias = familias
         self.agentesRepetidos = agentesRepetidos
+        self.agentes = agentes
         self.perfilSugerido = perfilSugerido
         self.spotlight = spotlight
         self.versao = versao
@@ -163,8 +180,8 @@ public enum DeskStateStore {
         copy.frase = scrub(state.frase) ?? "Leitura omitida."
         copy.vigilia = scrub(state.vigilia) ?? "desconhecida"
         copy.cargaSistema = state.cargaSistema.flatMap(scrub)
-        copy.termico = scrub(state.termico) ?? state.termico
-        copy.pressao = scrub(state.pressao) ?? state.pressao
+        copy.termico = scrub(state.termico) ?? "Sem leitura"
+        copy.pressao = scrub(state.pressao) ?? "Sem leitura"
         copy.perfilSugerido = state.perfilSugerido.flatMap(scrub)
         copy.telas = state.telas.compactMap(scrub)
         copy.usb = state.usb.compactMap(scrub)
@@ -178,6 +195,12 @@ public enum DeskStateStore {
         copy.agentesRepetidos = state.agentesRepetidos.compactMap { set in
             guard let titulo = scrub(set.titulo) else { return nil }
             var clean = set
+            clean.titulo = titulo
+            return clean
+        }
+        copy.agentes = state.agentes.compactMap { agent in
+            guard let titulo = scrub(agent.titulo) else { return nil }
+            var clean = agent
             clean.titulo = titulo
             return clean
         }
@@ -206,6 +229,10 @@ public enum DeskStateStore {
         }.joined(separator: "\n")
         let duplicates = state.agentesRepetidos.map { set in
             "- \(set.titulo) — \(set.copias) cópias · \(PTFormat.bytes(set.ram))"
+        }.joined(separator: "\n")
+        let liveAgents = state.agentes.map { agent in
+            let copies = agent.copias == 1 ? "1 cópia" : "\(agent.copias) cópias"
+            return "- \(agent.titulo) — \(PTFormat.percent(agent.cpu, digits: 1)) · \(PTFormat.bytes(agent.ram)) · \(copies)"
         }.joined(separator: "\n")
         let holders = state.segurandoSono.map { "- \($0)" }.joined(separator: "\n")
         let screens = state.telas.map { "- \($0)" }.joined(separator: "\n")
@@ -236,6 +263,9 @@ public enum DeskStateStore {
 
         ## Agentes repetidos
         \(duplicates.isEmpty ? "- nenhum" : duplicates)
+
+        ## Agentes
+        \(liveAgents.isEmpty ? "- nenhum" : liveAgents)
 
         ## Segurando o sono
         \(holders.isEmpty ? "- nenhum" : holders)

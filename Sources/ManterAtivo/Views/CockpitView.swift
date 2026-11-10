@@ -6,29 +6,36 @@ struct CockpitView: View {
 
     var body: some View {
         NavigationSplitView {
-            List(CockpitSection.allCases, selection: $section) { item in
-                Label(item.title, systemImage: item.symbol)
-                    .tag(item)
+            List(selection: $section) {
+                Section("Atividade") {
+                    navigationRows([.agora, .agentes, .processos])
+                }
+                Section("Este Mac") {
+                    navigationRows([.espaco, .mesa, .energia])
+                }
             }
             .listStyle(.sidebar)
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                VStack(alignment: .leading, spacing: 5) {
+                    Divider().padding(.bottom, 5)
+                    Label(model.wakeKnown ? "Vigília · " + model.wake.mode.title : "Lendo vigília…",
+                          systemImage: model.wakeSymbol)
+                        .font(.subheadline.weight(.medium))
+                    Text("CPU " + model.menuCPU)
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.horizontal, 14)
+                .padding(.bottom, 12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
             .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 240)
         } detail: {
             detail
-                .navigationTitle(section.title)
-                .toolbar {
-                    ToolbarItem(placement: .status) {
-                        HStack(spacing: 6) {
-                            Text(model.wakeKnown ? model.wake.mode.title : "Lendo")
-                            Text("·")
-                            Text(model.menuCPU)
-                                .monospacedDigit()
-                                .accessibilityLabel("CPU \(model.menuCPU)")
-                        }
-                        .foregroundStyle(.secondary)
-                    }
-                }
+                .navigationTitle("Manter Ativo")
+                .navigationSubtitle(section.title)
         }
-        .frame(minWidth: 920, minHeight: 620)
+        .frame(minWidth: 780, minHeight: 550)
         .alert(model.pending?.title ?? "", isPresented: pendingBinding) {
             Button(model.pending?.confirm ?? "Aplicar", role: .destructive) {
                 guard let prompt = model.pending else { return }
@@ -39,18 +46,34 @@ struct CockpitView: View {
         } message: {
             Text(model.pending?.message ?? "")
         }
-        .onAppear { model.start() }
+        .onAppear {
+            revealRequestedSection()
+        }
+        .onChange(of: model.requestedSection) { _, _ in revealRequestedSection() }
+    }
+
+    private func navigationRows(_ items: [CockpitSection]) -> some View {
+        ForEach(items) { item in
+            Label(item.title, systemImage: item.symbol).tag(item)
+        }
     }
 
     @ViewBuilder
     private var detail: some View {
         switch section {
         case .agora: AgoraView(model: model)
+        case .agentes: AgentesView(model: model)
         case .processos: ProcessosView(model: model)
         case .espaco: EspacoView(model: model)
         case .mesa: MesaView(model: model)
         case .energia: EnergiaView(model: model)
         }
+    }
+
+    private func revealRequestedSection() {
+        guard let target = model.requestedSection else { return }
+        section = target
+        model.requestedSection = nil
     }
 
     private var pendingBinding: Binding<Bool> {

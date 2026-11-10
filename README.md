@@ -1,68 +1,59 @@
 # Manter Ativo
 
-Painel nativo da barra de menus para o Mac. Uma frase diz o que a máquina está fazendo. A vigília continua valendo depois que o app fecha.
+**Quais agentes estão usando o seu Mac agora?** Veja a CPU, a memória e as cópias de cada agente local. Escolha quando o Mac pode dormir, inclusive depois de fechar o painel.
 
-Feito em SwiftUI, para macOS 15 ou mais novo. Sem conta, sem nuvem, sem telemetria.
+[English guide](docs/README.en.md) · [Demonstração de 20 segundos](docs/manter-ativo.mp4?raw=true) · [Instalação](#instalação)
 
-![Painel Agora](docs/painel.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/painel-escuro.png">
+  <img src="docs/painel.png" alt="Painel Agora. A frase destaca o uso de memória do Codex e a vigília de máquina. Abaixo, três agentes aparecem com CPU, memória e cópias.">
+</picture>
 
-## O que ele mostra
+*Interface real em português, com dados de demonstração.*
 
-- CPU dos clusters Super e Performance, memória, swap, pressão e térmico.
-- Bateria, ciclos, saúde e se o sistema segurou a carga.
-- Apps agrupados, com busca. Encerrar pede confirmação. Forçar é um segundo passo.
-- Disco, só quando você pede para medir. Apagar pede de novo e só mexe no que está no catálogo.
-- Telas, USB, quem está segurando o sono, Spotlight e Wake-on-LAN.
+## Da barra de menus ao processo
 
-Mesa e Bolso são sugestões. O app não troca o posto sozinho.
+Abra **Abrir painel**. Em **Agora**, a frase resume o que merece atenção. Os três primeiros agentes aparecem por memória, junto das tendências de CPU, RAM, swap e bateria. Use **Ver agentes** para buscar por nome e ordenar por consumo ou por número de cópias.
+
+Cada cópia corresponde a um processo raiz do grupo. Os filhos entram na CPU e na memória. Um agente com vários núcleos em uso pode passar de 100% de CPU. O painel lê apps assistentes, ferramentas de linha de comando e servidores MCP que executam neste Mac. Sessões em nuvem e abas do navegador ficam fora da contagem.
+
+![Lista de agentes com o After Effects MCP selecionado e suas medidas](docs/agentes.png)
 
 ## Vigília
 
-Dois níveis.
+| Modo | Comportamento |
+| --- | --- |
+| **Tela** | Mantém a tela acesa. Fechar a tampa ainda pode colocar o Mac em repouso. |
+| **Máquina** | Desativa o repouso do sistema. A vigília continua quando o painel fecha ou o app sai. |
+| **Desligada** | Na bateria, o Mac volta a poder dormir. Na tomada, os tempos de repouso da máquina e da tela ficam em zero. |
 
-**Tela** segura a tela acesa. A tampa ainda pode dormir.
+O componente de energia pede autorização de administrador para a instalação. Os perfis **Mesa** e **Bolso** são sugestões aplicadas por confirmação.
 
-**Máquina** desliga o sono do sistema. Fechar a janela ou sair do app não desfaz isso. Quem segura é o agente `com.guicunha.keepawake`.
+## Instalação
 
-**Desligada** devolve o comportamento de antes. Na bateria, o sono volta. Na tomada, sono e telas permanecem em 0, que é o estado em que muita mesa já estava.
+O app tem como alvo **macOS 15 ou posterior**. A instalação disponível é pelo código-fonte. Para compilar, use um Mac com Xcode 26 ou posterior e a ferramenta de linha de comando do Xcode selecionada.
 
-## Instalar
-
-É preciso o Swift 6, que vem com o Xcode.
-
-```bash
+```sh
 git clone https://github.com/guicunhaa/manter-ativo.git
 cd manter-ativo
 ./script/build_and_run.sh --install
 ```
 
-Isso coloca o app em `/Applications/Manter Ativo.app` e abre o painel. Se já existir um Manter Ativo ali, ele vai para `Manter Ativo (anterior).app` uma única vez.
+O instalador abre o painel em `/Applications/Manter Ativo.app`. Na primeira substituição, guarda a versão existente como `Manter Ativo (anterior).app`.
 
-Outros modos:
+| Comando no diretório do projeto | Resultado |
+| --- | --- |
+| `swift test` | Executa os testes do núcleo. |
+| `./script/build_and_run.sh --bundle` | Gera e verifica o app em `dist/`, sem iniciar nem instalar. |
+| `./script/build_and_run.sh --cockpit` | Abre o painel compilado. |
+| `./script/build_and_run.sh` | Inicia pela barra de menus. |
 
-```bash
-./script/build_and_run.sh            # só a barra de menus
-./script/build_and_run.sh --cockpit  # abre o painel
-swift test
-```
+## O que fica no Mac
 
-O ícone fonte é `Icon/AppIcon.png`, quadrado e sangrado. O macOS aplica o arredondado.
+O painel funciona sem conta e sem telemetria. O histórico local guarda até sete dias de amostras. Regras opcionais de nomeação ficam em `~/Library/Application Support/Manter Ativo/agentes.json`. O [contrato do retrato local](HARNESS.md) descreve os arquivos de estado.
 
-## Nomes da sua máquina
+**Processos** permite buscar famílias e pedir encerramento. **Espaço** mede apenas as pastas do catálogo, sob demanda. **Mesa** mostra telas, USB e o que segura o sono. **Energia** informa pressão térmica, modo de energia e as leituras disponíveis da bateria.
 
-Servidores MCP conhecidos já entram com nome. O que for só seu fica em `~/Library/Application Support/Manter Ativo/agentes.json`, fora do Git. Cada item tem `match` (trechos do comando), `title` e `key`.
+## Projeto
 
-## Retrato para a próxima sessão
-
-Com o app aberto, ele grava `estado.md` e `estado.json` na pasta do projeto quando ele está em `~/Developer/Manter Ativo`. O texto não leva caminho de arquivo. O contrato está em [HARNESS.md](HARNESS.md).
-
-## O que ele não finge
-
-- Não há slider de ventoinha. Se o Mac não entrega RPM, o painel mostra a pressão térmica e o modo de energia.
-- Não apaga Mail, Fotos, Mensagens nem a pasta de um projeto.
-- Não encerra processo do sistema, a própria vigília, nem o harness do teclado e do mouse.
-- O cache de pré-visualização do After Effects, quando aparece, é regenerável. Não é o projeto.
-
-## Licença
-
-[MIT](LICENSE). Pode usar, modificar e embarcar. O aviso de copyright fica junto.
+Criado por Gui Cunha. [Licença MIT](LICENSE). Para relatar um problema, informe a versão do macOS, o que fez e o que esperava ver. Remova dados pessoais de qualquer captura antes de anexar. [Abrir uma issue](https://github.com/guicunhaa/manter-ativo/issues)

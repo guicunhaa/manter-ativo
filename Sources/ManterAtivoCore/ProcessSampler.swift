@@ -72,7 +72,7 @@ public actor ProcessCensus {
 
     public init() {}
 
-    public func sample() -> (families: [AppFamily], duplicates: [DuplicateSet]) {
+    public func sample() -> GroupedProcesses {
         let records = self.records()
         return ProcessGrouper.group(records)
     }
@@ -149,7 +149,8 @@ public actor ProcessCensus {
             } else {
                 owned = false
             }
-            let label = path.isEmpty ? (name.isEmpty ? command : name) : path
+            // ps supplies comm (the executable), never a full argument list.
+            let label = path.isEmpty ? (name.isEmpty ? fallback?.command ?? "" : name) : path
             guard !label.isEmpty else { continue }
             records.append(
                 ProcessRecord(
@@ -218,12 +219,14 @@ private func arguments(_ pid: pid_t) -> String? {
     var buffer = [UInt8](repeating: 0, count: size)
     guard sysctl(&mib, 3, &buffer, &size, nil, 0) == 0 else { return nil }
     guard size >= 4 else { return nil }
+    let argc = Int(buffer.withUnsafeBytes { $0.loadUnaligned(as: Int32.self) })
+    guard argc > 0 else { return nil }
     var cursor = 4
     while cursor < size && buffer[cursor] != 0 { cursor += 1 }
     while cursor < size && buffer[cursor] == 0 { cursor += 1 }
     var parts: [String] = []
     var token: [UInt8] = []
-    while cursor < size && parts.count < 24 {
+    while cursor < size && parts.count < min(argc, 24) {
         let byte = buffer[cursor]
         cursor += 1
         if byte == 0 {

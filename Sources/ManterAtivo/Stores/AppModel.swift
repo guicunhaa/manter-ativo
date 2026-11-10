@@ -31,6 +31,9 @@ final class AppModel {
     var thermal = ThermalLevel.nominal
     var families: [AppFamily] = []
     var duplicates: [DuplicateSet] = []
+    var bar: AgentBar.Snapshot = .empty
+    var inspectedAgentID: String?
+    var requestedSection: CockpitSection?
     var holders: [SleepHolder] = []
     var displays: [DisplayInfo] = []
     var usb: [USBDeviceInfo] = []
@@ -69,6 +72,10 @@ final class AppModel {
                 wakeKnown: wakeKnown
             )
         )
+    }
+
+    var totalAgentBytes: Double {
+        bar.rows.reduce(0) { $0 + Double($1.residentBytes) }
     }
 
     var topUserFamily: AppFamily? {
@@ -151,16 +158,23 @@ final class AppModel {
     }
 
     func askProfile(_ profile: DeskProfile) {
-        let mode: WakeMode = profile == .mesa ? .machine : .off
         pending = PendingPrompt(
             title: "Perfil \(profile.title)",
             message: profile == .mesa
-                ? "Liga a vigília de máquina. As três telas e a tomada continuam como estão."
-                : "Solta a vigília nuclear. Na bateria o Mac volta a poder dormir.",
+                ? "Ativa a vigília de máquina, inclusive com a tampa fechada."
+                : "Desliga a vigília. Na bateria, o Mac volta a poder dormir.",
             confirm: "Aplicar",
             kind: .profile(profile)
         )
-        _ = mode
+    }
+
+    func inspectAgent(_ id: String) {
+        inspectedAgentID = id
+        requestedSection = .agentes
+    }
+
+    func selectAgent(_ id: String) {
+        inspectedAgentID = id
     }
 
     func askKill(_ family: AppFamily) {
@@ -328,9 +342,13 @@ final class AppModel {
         publishState()
     }
 
-    private func applyCensus(_ result: (families: [AppFamily], duplicates: [DuplicateSet])) {
+    private func applyCensus(_ result: GroupedProcesses) {
         families = result.families
         duplicates = result.duplicates
+        bar = AgentBar.snapshot(result)
+        if let inspectedAgentID, bar.rows.contains(where: { $0.id == inspectedAgentID }) == false {
+            self.inspectedAgentID = bar.rows.first?.id
+        }
         publishState()
     }
 
@@ -402,6 +420,9 @@ final class AppModel {
             },
             agentesRepetidos: duplicates.map { set in
                 DeskDuplicate(titulo: set.title, copias: set.count, ram: set.residentBytes)
+            },
+            agentes: bar.rows.map { row in
+                DeskAgent(titulo: row.title, cpu: row.cpuPercent, ram: row.residentBytes, copias: row.copyCount)
             },
             perfilSugerido: suggestedProfile?.title,
             spotlight: spotlight,

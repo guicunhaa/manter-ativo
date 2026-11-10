@@ -76,7 +76,7 @@ enum ActionService {
         var nameBuffer = [CChar](repeating: 0, count: 256)
         proc_name(pid, &nameBuffer, UInt32(nameBuffer.count))
         let name = String(cString: nameBuffer).lowercased()
-        let blocked = ["kernel_task", "launchd", "windowserver", "loginwindow", "manterativo", "peripheralctl"]
+        let blocked = ["kernel_task", "launchd", "windowserver", "loginwindow", "manterativo", "peripheralctl", "caffeinate"]
         if blocked.contains(name) { return false }
         var pathBuffer = [CChar](repeating: 0, count: Int(MAXPATHLEN))
         _ = proc_pidpath(pid, &pathBuffer, UInt32(pathBuffer.count))

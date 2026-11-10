@@ -43,21 +43,21 @@ struct MesaView: View {
                     }
                 }
                 HStack {
-                    Text(model.wake.flags.wakeOnLAN ? "Wake on LAN ligado" : "Wake on LAN desligado")
+                    Text(model.wakeKnown ? (model.wake.flags.wakeOnLAN ? "Wake on LAN ligado" : "Wake on LAN desligado") : "Lendo Wake on LAN…")
                     Spacer()
                     Button(model.wake.flags.wakeOnLAN ? "Desligar" : "Ligar") {
                         model.askWakeOnLAN(!model.wake.flags.wakeOnLAN)
                     }
-                    .disabled(model.busy)
+                    .disabled(model.busy || !model.wakeKnown)
                 }
                 .padding(12)
-                .glassCard(corner: 12)
+                .panelSurface(corner: 12)
                 if model.holders.contains(where: { $0.title == "Microfone" }) {
                     Text("Tem um tap de microfone segurando o sono. Fechar o app que escuta solta isso.")
                         .font(.callout)
                         .padding(12)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .glassCard(corner: 12)
+                        .panelSurface(corner: 12)
                 }
             }
             .padding(20)
@@ -84,5 +84,7 @@ struct MesaView: View {
             content()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .panelSurface()
     }
 }

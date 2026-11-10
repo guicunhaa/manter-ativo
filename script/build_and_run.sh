@@ -69,20 +69,7 @@ PLIST
 
 stage_icon() {
   local resources="$1"
-  local source="$ROOT_DIR/Icon/AppIcon.png"
-  local iconset="$ROOT_DIR/Icon/AppIcon.iconset"
-  [[ -f "$source" ]] || return 0
-  rm -rf "$iconset"
-  mkdir -p "$iconset"
-  local size
-  for size in 16 32 128 256 512; do
-    sips -z "$size" "$size" "$source" --out "$iconset/icon_${size}x${size}.png" >/dev/null
-    local retina=$((size * 2))
-    sips -z "$retina" "$retina" "$source" --out "$iconset/icon_${size}x${size}@2x.png" >/dev/null
-  done
-  iconutil -c icns "$iconset" -o "$resources/AppIcon.icns"
-  cp "$resources/AppIcon.icns" "$ROOT_DIR/Icon/AppIcon.icns"
-  rm -rf "$iconset"
+  cp "$ROOT_DIR/Icon/AppIcon.icns" "$resources/AppIcon.icns"
 }
 
 open_app() {
@@ -94,6 +81,10 @@ case "$MODE" in
     stop_app
     build_bundle
     open_app
+    ;;
+  --bundle|bundle)
+    build_bundle
+    codesign --verify --strict "$APP_BUNDLE"
     ;;
   --debug|debug)
     stop_app
@@ -138,7 +129,7 @@ case "$MODE" in
     /usr/bin/open -n "/Applications/$APP_DISPLAY.app" --args --cockpit
     ;;
   *)
-    echo "usage: $0 [run|--cockpit|--debug|--logs|--telemetry|--verify|--install]" >&2
+    echo "usage: $0 [run|--bundle|--cockpit|--debug|--logs|--telemetry|--verify|--install]" >&2
     exit 2
     ;;
 esac

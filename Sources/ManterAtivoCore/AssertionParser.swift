@@ -38,7 +38,8 @@ public enum AssertionParser {
         }
 
         let title = titleFor(process: process, named: named, detail: next)
-        let detail = detailFor(process: process, named: named, next: next)
+        // Assertion names and details may contain document names or private identifiers.
+        let detail = process == "caffeinate" ? "O caffeinate está segurando o sono." : "O processo solicitou manter o Mac ativo."
         return SleepHolder(id: "proc:" + title, title: title, detail: detail)
     }
 
@@ -53,15 +54,6 @@ public enum AssertionParser {
             return "ChatGPT"
         }
         return process
-    }
-
-    private static func detailFor(process: String, named: String, next: String) -> String {
-        if process == "caffeinate" {
-            return "O caffeinate da vigília está segurando o sono."
-        }
-        if !named.isEmpty { return named }
-        let trimmed = next.trimmingCharacters(in: .whitespaces)
-        return trimmed.isEmpty ? "Impede o sono ocioso." : trimmed
     }
 
     private static func kernelHolder(line: String) -> SleepHolder? {
@@ -88,7 +80,7 @@ public enum WakeParser {
         PowerFlags(
             sleepDisabled: firstInt(in: pmsetOutput, label: "SleepDisabled") == 1,
             wakeOnLAN: firstInt(in: pmsetOutput, label: "womp") == 1,
-            powermode: firstInt(in: pmsetOutput, label: "powermode")
+            powermode: energyMode(from: pmsetOutput)
         )
     }
 
@@ -122,8 +114,17 @@ public enum WakeParser {
         return text.contains("state = running") || text.contains("com.guicunha.keepawake")
     }
 
+    private static func energyMode(from output: String) -> Int? {
+        if let mode = firstInt(in: output, label: "powermode") { return mode }
+        let high = firstInt(in: output, label: "highpowermode")
+        let low = firstInt(in: output, label: "lowpowermode")
+        if high == 1 { return 2 }
+        if low == 1 { return 1 }
+        return low == 0 || high == 0 ? 0 : nil
+    }
+
     private static func firstInt(in text: String, label: String) -> Int? {
-        let pattern = #"\#(NSRegularExpression.escapedPattern(for: label))\s+(-?\d+)"#
+        let pattern = #"(?m)^\s*\#(NSRegularExpression.escapedPattern(for: label))\s+(-?\d+)"#
         guard let regex = try? NSRegularExpression(pattern: pattern) else { return nil }
         let range = NSRange(text.startIndex..., in: text)
         guard let match = regex.firstMatch(in: text, range: range),

@@ -63,7 +63,9 @@ public enum PhraseBuilder {
             clauses.append("Bateria em \(battery.percent)% com o carregador\(watts) ligado e a corrente em zero.")
         }
 
-        if input.displayCount >= 3 {
+        if input.displayCount > 3 {
+            clauses.append("\(input.displayCount) telas ligadas.")
+        } else if input.displayCount == 3 {
             clauses.append("Três telas ligadas.")
         } else if input.displayCount == 2 {
             clauses.append("Duas telas ligadas.")
@@ -74,7 +76,7 @@ public enum PhraseBuilder {
         }
 
         if clauses.isEmpty {
-            return "A máquina está folgada. " + wakeClause(input.wake)
+            return "Lendo o estado do Mac…"
         }
         return clauses.prefix(4).joined(separator: " ")
     }

@@ -41,6 +41,7 @@ struct ManterAtivoApp: App {
     var body: some Scene {
         Window("Manter Ativo", id: "cockpit") {
             CockpitView(model: model)
+                .onAppear { model.start() }
         }
         .defaultLaunchBehavior(opensCockpitAtLaunch ? .presented : .suppressed)
         .defaultSize(width: 1120, height: 760)
@@ -53,7 +54,7 @@ struct ManterAtivoApp: App {
         } label: {
             MenuLabel(model: model)
         }
-        .menuBarExtraStyle(.menu)
+        .menuBarExtraStyle(.window)
 
         Settings {
             SettingsView(model: model)

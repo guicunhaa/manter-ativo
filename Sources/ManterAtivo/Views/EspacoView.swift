@@ -44,7 +44,7 @@ struct EspacoView: View {
                                 .disabled(!item.exists || item.bytes == 0 || model.busy)
                         }
                         .padding(12)
-                        .glassCard(corner: 12)
+                        .panelSurface(corner: 12)
                     }
                 }
             }

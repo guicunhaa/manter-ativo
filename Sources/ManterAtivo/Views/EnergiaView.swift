@@ -28,24 +28,27 @@ struct EnergiaView: View {
                     }
                     .padding(14)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .glassCard()
+                    .panelSurface()
                 }
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Calor")
+                    Label("Pressão térmica", systemImage: "thermometer.medium")
                         .font(.headline)
-                    Text("Pressão térmica: \(model.thermal.title).")
-                    Text("O SMC deste M5 Pro não entregou RPM da ventoinha para o app. Sem leitura, não há slider. O controle que a Apple abre é o modo de energia.")
-                        .font(.caption)
+                    Text(model.cpu.totalPercent == nil ? "Aguardando leitura" : model.thermal.title)
+                        .font(.title2.weight(.medium))
+                    Text("Modo de energia · " + energyMode)
                         .foregroundStyle(.secondary)
-                }
-                HStack {
-                    ForEach([EnergyChoice.automatic, .low, .high], id: \.self) { choice in
-                        Button(choice.title) { model.askEnergy(choice) }
-                            .disabled(model.busy)
+                    HStack {
+                        ForEach([EnergyChoice.automatic, .low, .high], id: \.self) { choice in
+                            Button(choice.title) { model.askEnergy(choice) }
+                                .disabled(model.busy)
+                        }
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(16)
+                .panelSurface()
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Histórico")
+                    Text("Histórico de CPU")
                         .font(.headline)
                     Text(historyLine)
                         .font(.caption)
@@ -57,9 +60,20 @@ struct EnergiaView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+                .padding(16)
+                .panelSurface()
                 spotlightRow
             }
             .padding(20)
+        }
+    }
+
+    private var energyMode: String {
+        switch model.wake.flags.powermode {
+        case 0: "Automático"
+        case 1: "Baixa energia"
+        case 2: "Alta potência"
+        default: "Sem leitura"
         }
     }
 
@@ -80,7 +94,7 @@ struct EnergiaView: View {
         }
         .disabled(model.busy)
         .padding(12)
-        .glassCard(corner: 12)
+        .panelSurface(corner: 12)
     }
 
     private var spotlightText: String {

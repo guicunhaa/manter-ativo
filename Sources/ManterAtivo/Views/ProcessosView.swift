@@ -14,11 +14,10 @@ struct ProcessosView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                Text("Famílias somam os processos-filho. Encerrar pede confirmação e não mexe em WindowServer, na vigília nem no harness do mouse.")
+                Text("CPU e memória incluem os processos filhos. Encerrar um app pede confirmação.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                 if !model.duplicates.isEmpty {
-                    GlassGroup {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Agentes repetidos")
                             .font(.headline)
@@ -35,14 +34,17 @@ struct ProcessosView: View {
                                     .disabled(model.busy)
                             }
                             .padding(12)
-                            .glassCard(corner: 12)
+                            .panelSurface(corner: 12)
                         }
-                    }
                     }
                 }
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Quem pesa")
                         .font(.headline)
+                    if families.isEmpty {
+                        Text(query.isEmpty ? "Lendo os processos…" : "Nenhum app encontrado.")
+                            .foregroundStyle(.secondary)
+                    }
                     ForEach(families) { family in
                         HStack(alignment: .firstTextBaseline) {
                             VStack(alignment: .leading, spacing: 2) {
@@ -66,6 +68,8 @@ struct ProcessosView: View {
                         Divider()
                     }
                 }
+                .padding(16)
+                .panelSurface()
             }
             .padding(20)
         }

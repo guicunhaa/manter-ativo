@@ -3,6 +3,7 @@ import SwiftUI
 
 struct SettingsView: View {
     var model: AppModel
+    @Environment(\.openWindow) private var openWindow
     @State private var loginNote = "O app fica na barra. Entrar no login é opcional."
 
     var body: some View {
@@ -13,7 +14,12 @@ struct SettingsView: View {
                     Text(model.wake.helperInstalled ? "Instalado" : "Ausente")
                 }
                 if !model.wake.helperInstalled {
-                    Button("Instalar componente") { model.askInstallHelper() }
+                    Button("Instalar componente") {
+                        model.requestedSection = .agora
+                        openWindow(id: "cockpit")
+                        model.askInstallHelper()
+                    }
+                    .disabled(model.busy || !model.wakeKnown)
                 }
             }
             Section("Abrir ao entrar") {

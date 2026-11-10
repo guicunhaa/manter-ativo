@@ -1,0 +1,4 @@
+# Modelo. O install-helper.sh grava a regra com o usuário real.
+# NÃO instale este arquivo como está.
+# USUARIO ALL=(root) NOPASSWD: /usr/local/bin/manter-ativo-on, /usr/local/bin/manter-ativo-off
+

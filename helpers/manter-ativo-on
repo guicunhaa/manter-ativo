@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+/usr/bin/pmset -a sleep 0 displaysleep 0 disksleep 0 hibernatemode 0 standby 0 autopoweroff 0 powernap 0 ttyskeepawake 1 tcpkeepalive 1
+/usr/bin/pmset -a disablesleep 1
+/usr/bin/pmset -b sleep 0 displaysleep 0 disksleep 0
+/usr/bin/pmset -c sleep 0 displaysleep 0 disksleep 0
+/usr/bin/defaults write /Library/Preferences/.GlobalPreferences com.apple.autologout.AutoLogOutDelay -int 0

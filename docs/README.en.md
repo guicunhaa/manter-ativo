@@ -2,7 +2,7 @@
 
 **See which local AI agents are using your Mac.** A native SwiftUI menu bar app shows memory, CPU and root process counts for assistants, coding CLIs and MCP servers. Its keep-awake agent continues running after the panel closes.
 
-[Download Beta 1 for macOS](https://github.com/guicunhaa/manter-ativo/releases/download/v2.1-beta.1/Manter-Ativo-2.1-beta.1-macOS-universal.zip) · [Português](../README.md) · [20-second walkthrough](manter-ativo.mp4?raw=true)
+[Website](https://guicunhaa.github.io/manter-ativo/) · [Download Beta 1 for macOS](https://github.com/guicunhaa/manter-ativo/releases/download/v2.1-beta.1/Manter-Ativo-2.1-beta.1-macOS-universal.zip) · [Português](../README.md) · [20-second walkthrough](manter-ativo.mp4?raw=true)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="painel-escuro.png">

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#141d2d">
+  <title>Manter Ativo — Local AI agent monitor for macOS</title>
+  <meta name="description" content="Monitor CPU, memory and copies of local AI agents and MCP servers from the Mac menu bar. Download the free universal beta for Apple silicon and Intel Macs.">
+  <link rel="canonical" href="https://guicunhaa.github.io/manter-ativo/">
+  <link rel="alternate" hreflang="en" href="https://guicunhaa.github.io/manter-ativo/">
+  <link rel="alternate" hreflang="pt-BR" href="https://guicunhaa.github.io/manter-ativo/pt-br/">
+  <link rel="alternate" hreflang="x-default" href="https://guicunhaa.github.io/manter-ativo/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Manter Ativo">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="pt_BR">
+  <meta property="og:url" content="https://guicunhaa.github.io/manter-ativo/">
+  <meta property="og:title" content="Manter Ativo — Local AI agent monitor for macOS">
+  <meta property="og:description" content="Monitor CPU, memory and copies of local AI agents and MCP servers from the Mac menu bar. Download the free universal beta for Apple silicon and Intel Macs.">
+  <meta property="og:image" content="https://guicunhaa.github.io/manter-ativo/painel-escuro.png">
+  <meta property="og:image:alt" content="Dashboard walkthrough">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" sizes="96x96" href="./assets/icon.png">
+  <link rel="stylesheet" href="./assets/site.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","@id":"https://guicunhaa.github.io/manter-ativo/#page","url":"https://guicunhaa.github.io/manter-ativo/","name":"Manter Ativo — Local AI agent monitor for macOS","description":"Monitor CPU, memory and copies of local AI agents and MCP servers from the Mac menu bar. Download the free universal beta for Apple silicon and Intel Macs.","inLanguage":"en","mainEntity":{"@type":"SoftwareApplication","@id":"https://guicunhaa.github.io/manter-ativo/#application","name":"Manter Ativo","applicationCategory":"UtilitiesApplication","operatingSystem":"macOS 15 or later","softwareVersion":"2.1 Beta 1","url":"https://guicunhaa.github.io/manter-ativo/","downloadUrl":"https://github.com/guicunhaa/manter-ativo/releases/download/v2.1-beta.1/Manter-Ativo-2.1-beta.1-macOS-universal.zip","screenshot":"https://guicunhaa.github.io/manter-ativo/painel.png","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"inLanguage":"pt-BR","author":{"@type":"Person","name":"Gui Cunha"},"license":"https://github.com/guicunhaa/manter-ativo/blob/main/LICENSE"}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap mast">
+  <a class="brand" href="./"><img src="./assets/icon.png" width="36" height="36" alt="">Manter Ativo</a>
+  <nav class="nav" aria-label="Main navigation"><a href="#features">Inside the app</a><a href="#install">Installation</a></nav>
+  <nav class="language" aria-label="Language"><a href="./" lang="en" hreflang="en" aria-label="English" aria-current="page">EN</a><a href="./pt-br/" lang="pt-BR" hreflang="pt-BR" aria-label="Português brasileiro">PT</a></nav>
+</div></header>
+<main id="main"><div class="night">
+<section class="wrap hero" aria-labelledby="headline">
+  <div class="hero-copy">
+    <h1 id="headline">Which agents are using <em>your Mac?</em></h1>
+    <p class="intro">See CPU and memory use for Claude Code, Codex and local MCP servers in one native menu bar app. Keep your Mac awake while they work.</p>
+    <div class="actions"><a class="download" href="https://github.com/guicunhaa/manter-ativo/releases/download/v2.1-beta.1/Manter-Ativo-2.1-beta.1-macOS-universal.zip"><span class="down-icon" aria-hidden="true">↓</span>Download Beta 1</a><a class="source" href="https://github.com/guicunhaa/manter-ativo">View source <span aria-hidden="true">↗</span></a></div>
+    <p class="compat">macOS 15+ · Apple silicon &amp; Intel</p>
+    <p class="gate">Technical beta. Gatekeeper may block this download. <a href="#gatekeeper">Installation details</a></p>
+  </div>
+  <figure class="demo">
+    <div class="observatory">
+      <div class="orbits" aria-hidden="true"></div>
+      <video controls playsinline preload="none" width="1600" height="1116" aria-label="20-second walkthrough of the native Mac dashboard" poster="./assets/dashboard.webp">
+        <source src="./manter-ativo.mp4" type="video/mp4">
+        <a href="./manter-ativo.mp4">Download the walkthrough</a>
+      </video>
+    </div>
+    <figcaption><strong>Dashboard walkthrough</strong><span>20 seconds · Sample data · UI in Portuguese</span></figcaption>
+    <details class="transcript"><summary>Video description</summary><p>The walkthrough opens on Agora. Codex is using 2.5 GB and machine wake mode is active. The view switches to Agentes, where selecting After Effects MCP shows its CPU use, memory and three root processes.</p></details>
+  </figure>
+</section>
+</div>
+<section id="features" class="paper" aria-labelledby="features-title">
+  <div class="wrap inside">
+    <div class="feature-heading"><h2 id="features-title">Follow an agent from the menu bar.</h2><p>Start with the three agents using the most memory. Open the full list to find the process you care about.</p></div>
+    <div class="feature-grid">
+      <figure class="shot"><img src="./assets/agents.webp" width="1440" height="1004" loading="lazy" alt="The agent list with After Effects MCP selected, showing CPU, memory and three copies.">
+        <figcaption><strong>Agent detail</strong><span>Example measurements</span></figcaption>
+      </figure>
+      <dl>
+        <dt>Compare local agents</dt>
+        <dd>Search by name or sort by CPU, memory or copies. Each root process counts as one copy, and its children contribute their usage.</dd>
+        <dt>Choose what stays awake</dt>
+        <dd>Keep the display on or prevent system sleep. A separate macOS agent keeps your choice active after the panel closes.</dd>
+        <dt>Keep activity on your Mac</dt>
+        <dd>Read local processes without an account or telemetry. Browser tabs and cloud-only agents are outside the monitor’s scope.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+<section id="install" class="installation" aria-labelledby="install-title">
+  <div class="wrap install-grid">
+    <div><h2 id="install-title">Install the technical beta.</h2><p>macOS 15 or later. The compiled app runs without Xcode. The interface is in Brazilian Portuguese.</p>
+      <a class="download" href="https://github.com/guicunhaa/manter-ativo/releases/download/v2.1-beta.1/Manter-Ativo-2.1-beta.1-macOS-universal.zip"><span class="down-icon" aria-hidden="true">↓</span>Download Beta 1</a>
+    </div>
+    <div><ol><li>Download and unzip the universal macOS app.</li><li>Drag Manter Ativo.app into Applications.</li><li>Open the app in Finder. Use “Abrir painel” in the menu bar to return to the dashboard.</li></ol>
+      <aside id="gatekeeper"><h3>About Gatekeeper</h3><p>Beta 1 uses an ad hoc signature. Gatekeeper rejected the bundle in distribution assessment and macOS may block first launch. Developer ID signing and Apple notarization are pending.</p></aside>
+      <div class="release-links"><a href="https://github.com/guicunhaa/manter-ativo/releases/tag/v2.1-beta.1">Release notes</a><a href="https://github.com/guicunhaa/manter-ativo/releases/download/v2.1-beta.1/Manter-Ativo-2.1-beta.1-macOS-universal.zip.sha256">SHA-256 checksum</a></div>
+    </div>
+  </div>
+</section>
+</main>
+<footer><div class="wrap foot"><span>Manter Ativo · Gui Cunha</span><a href="https://github.com/guicunhaa/manter-ativo/blob/main/LICENSE">MIT license</a><a href="https://github.com/guicunhaa/manter-ativo">GitHub ↗</a></div></footer>
+</body>
+</html>

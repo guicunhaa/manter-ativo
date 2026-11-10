@@ -2,9 +2,9 @@
 
 **Quais agentes estão usando o seu Mac agora?** Veja a CPU, a memória e as cópias de cada agente local. Escolha quando o Mac pode dormir, inclusive depois de fechar o painel.
 
-See CPU and memory usage for Claude Code, Codex and other local AI agents from the macOS menu bar. The dashboard also shows local Model Context Protocol (MCP) servers. [English guide](docs/README.en.md)
+See CPU and memory usage for Claude Code, Codex and other local AI agents from the macOS menu bar. The dashboard also shows local Model Context Protocol (MCP) servers. [Website in English](https://guicunhaa.github.io/manter-ativo/) · [English guide](docs/README.en.md)
 
-[Baixar a Beta 1 para macOS](https://github.com/guicunhaa/manter-ativo/releases/download/v2.1-beta.1/Manter-Ativo-2.1-beta.1-macOS-universal.zip) · [Demonstração de 20 segundos](docs/manter-ativo.mp4?raw=true) · [Instalação](#instalação)
+[Site em português](https://guicunhaa.github.io/manter-ativo/pt-br/) · [Baixar a Beta 1 para macOS](https://github.com/guicunhaa/manter-ativo/releases/download/v2.1-beta.1/Manter-Ativo-2.1-beta.1-macOS-universal.zip) · [Demonstração de 20 segundos](docs/manter-ativo.mp4?raw=true) · [Instalação](#instalação)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/painel-escuro.png">

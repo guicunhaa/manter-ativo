@@ -58,6 +58,13 @@ final class AppModel {
     private let history = HistoryStore.defaultStore()
     private let hostSampler = HostSampler()
 
+    let releaseVersion: String = {
+        let info = Bundle.main.infoDictionary ?? [:]
+        let version = info["CFBundleShortVersionString"] as? String ?? "Desenvolvimento"
+        let channel = info["ManterAtivoReleaseChannel"] as? String
+        return [version, channel].compactMap { $0 }.joined(separator: " ")
+    }()
+
     var phrase: String {
         PhraseBuilder.make(
             PhraseInput(
@@ -426,7 +433,7 @@ final class AppModel {
             },
             perfilSugerido: suggestedProfile?.title,
             spotlight: spotlight,
-            versao: "2.1"
+            versao: releaseVersion
         )
     }
 

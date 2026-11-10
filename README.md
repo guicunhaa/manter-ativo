@@ -2,7 +2,7 @@
 
 **Quais agentes estão usando o seu Mac agora?** Veja a CPU, a memória e as cópias de cada agente local. Escolha quando o Mac pode dormir, inclusive depois de fechar o painel.
 
-[English guide](docs/README.en.md) · [Demonstração de 20 segundos](docs/manter-ativo.mp4?raw=true) · [Instalação](#instalação)
+[Baixar a Beta 1 para macOS](https://github.com/guicunhaa/manter-ativo/releases/download/v2.1-beta.1/Manter-Ativo-2.1-beta.1-macOS-universal.zip) · [English guide](docs/README.en.md) · [Demonstração de 20 segundos](docs/manter-ativo.mp4?raw=true) · [Instalação](#instalação)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/painel-escuro.png">
@@ -31,10 +31,16 @@ O componente de energia pede autorização de administrador para a instalação.
 
 ## Instalação
 
-O app tem como alvo **macOS 15 ou posterior**. A instalação disponível é pelo código-fonte. Para compilar, use um Mac com Xcode 26 ou posterior e a ferramenta de linha de comando do Xcode selecionada.
+A **2.1 Beta 1** inclui o app compilado para Apple Silicon e Intel, com alvo **macOS 15 ou posterior**. Baixe o ZIP, descompacte e arraste **Manter Ativo.app** para Aplicativos. Na primeira abertura pelo Finder, o painel aparece. O uso do app compilado dispensa Xcode. [Notas da beta e SHA-256](https://github.com/guicunhaa/manter-ativo/releases/tag/v2.1-beta.1)
+
+**Esta beta técnica usa assinatura local *ad hoc*.** A avaliação de distribuição do Gatekeeper rejeitou o pacote. O macOS pode bloquear a primeira abertura do download. A assinatura Developer ID e a notarização pela Apple ficam para uma distribuição futura.
+
+### Compilar pelo código-fonte
+
+Use Xcode 26 ou posterior com a ferramenta de linha de comando do Xcode selecionada. Para reproduzir esta beta, clone a tag da versão.
 
 ```sh
-git clone https://github.com/guicunhaa/manter-ativo.git
+git clone --branch v2.1-beta.1 --depth 1 https://github.com/guicunhaa/manter-ativo.git
 cd manter-ativo
 ./script/build_and_run.sh --install
 ```
@@ -45,6 +51,7 @@ O instalador abre o painel em `/Applications/Manter Ativo.app`. Na primeira subs
 | --- | --- |
 | `swift test` | Executa os testes do núcleo. |
 | `./script/build_and_run.sh --bundle` | Gera e verifica o app em `dist/`, sem iniciar nem instalar. |
+| `./script/build_and_run.sh --package` | Gera o ZIP universal e seu arquivo SHA-256 em `dist/`. |
 | `./script/build_and_run.sh --cockpit` | Abre o painel compilado. |
 | `./script/build_and_run.sh` | Inicia pela barra de menus. |
 

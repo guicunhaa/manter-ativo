@@ -8,6 +8,9 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
+            Section("Manter Ativo") {
+                LabeledContent("Versão", value: model.releaseVersion)
+            }
             Section("Barra de menus") {
                 Text("Fechar a janela não solta a vigília. Sair do app também não. A vigília só muda quando você escolhe Desligada, Tela ou Máquina.")
                 LabeledContent("Componente de energia") {

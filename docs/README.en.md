@@ -2,7 +2,7 @@
 
 **See which local AI agents are using your Mac.** A native SwiftUI menu bar app shows memory, CPU and root process counts for assistants, coding CLIs and MCP servers. Its keep-awake agent continues running after the panel closes.
 
-[Português](../README.md) · [20-second walkthrough](manter-ativo.mp4?raw=true)
+[Download Beta 1 for macOS](https://github.com/guicunhaa/manter-ativo/releases/download/v2.1-beta.1/Manter-Ativo-2.1-beta.1-macOS-universal.zip) · [Português](../README.md) · [20-second walkthrough](manter-ativo.mp4?raw=true)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="painel-escuro.png">
@@ -11,12 +11,18 @@
 
 *The app interface is in Brazilian Portuguese. The screenshots and walkthrough use sample data.*
 
-## Try it from source
+## Install Beta 1
 
-The app targets macOS 15 and later. Building requires Xcode 26 or later with its command-line tools selected. A signed public download is pending.
+The ZIP contains a universal macOS app for Apple silicon and Intel, targeting macOS 15 or later. Unzip it, drag **Manter Ativo.app** to Applications and open it in Finder. The dashboard opens on first launch. Xcode is only needed to build from source. [Release notes and SHA-256](https://github.com/guicunhaa/manter-ativo/releases/tag/v2.1-beta.1)
+
+**This technical beta uses an ad hoc signature.** The Gatekeeper distribution assessment rejected the bundle. macOS may block the downloaded app on first launch. Developer ID signing and Apple notarization are planned for a future distribution.
+
+## Build from source
+
+Use Xcode 26 or later with its command-line tools selected. Check out the tagged source to reproduce this beta.
 
 ```sh
-git clone https://github.com/guicunhaa/manter-ativo.git
+git clone --branch v2.1-beta.1 --depth 1 https://github.com/guicunhaa/manter-ativo.git
 cd manter-ativo
 ./script/build_and_run.sh --install
 ```

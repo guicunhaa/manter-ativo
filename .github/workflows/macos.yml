@@ -1,0 +1,17 @@
+name: macOS
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test the Swift package
+        run: swift test
+      - name: Build and verify the app bundle
+        run: ./script/build_and_run.sh --bundle
